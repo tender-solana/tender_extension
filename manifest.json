@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Tender",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "description": "Spend crypto like cash: pay Amazon, Apple, Nike, Sephora, adidas, Zalando, IKEA and Airbnb orders straight from your wallet.",
   "icons": {
     "16": "assets/icon-16.png",
