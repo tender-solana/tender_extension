@@ -1,0 +1,185 @@
+{
+  "manifest_version": 3,
+  "name": "Tender",
+  "version": "0.6.0",
+  "description": "Spend crypto like cash: pay Amazon, Apple, Nike, Sephora, adidas, Zalando, IKEA and Airbnb orders straight from your wallet.",
+  "icons": {
+    "16": "assets/icon-16.png",
+    "32": "assets/icon-32.png",
+    "48": "assets/icon-48.png",
+    "128": "assets/icon-128.png"
+  },
+  "permissions": [
+    "storage",
+    "activeTab"
+  ],
+  "host_permissions": [
+    "https://paywithtender.vercel.app/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Tender",
+    "default_icon": {
+      "16": "assets/icon-16.png",
+      "32": "assets/icon-32.png"
+    }
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://paywithtender.vercel.app/*",
+        "https://www.amazon.com/*",
+        "https://www.amazon.co.uk/*",
+        "https://www.amazon.fr/*",
+        "https://www.amazon.de/*",
+        "https://www.amazon.es/*",
+        "https://www.amazon.it/*",
+        "https://www.amazon.nl/*",
+        "https://www.amazon.ca/*",
+        "https://www.nike.com/*",
+        "https://www.adidas.com/*",
+        "https://www.adidas.co.uk/*",
+        "https://www.adidas.fr/*",
+        "https://www.adidas.de/*",
+        "https://www.adidas.es/*",
+        "https://www.adidas.it/*",
+        "https://www.adidas.nl/*",
+        "https://www.adidas.ca/*",
+        "https://www.zalando.co.uk/*",
+        "https://www.zalando.fr/*",
+        "https://www.zalando.de/*",
+        "https://www.zalando.es/*",
+        "https://www.zalando.it/*",
+        "https://www.zalando.nl/*",
+        "https://www.zalando.be/*",
+        "https://www.ikea.com/*",
+        "https://ordercapture.ikea.com/*",
+        "https://www.airbnb.com/*",
+        "https://www.airbnb.co.uk/*",
+        "https://www.airbnb.fr/*",
+        "https://www.airbnb.de/*",
+        "https://www.airbnb.es/*",
+        "https://www.airbnb.it/*",
+        "https://www.airbnb.nl/*",
+        "https://www.airbnb.ca/*",
+        "https://www.apple.com/*",
+        "https://*.store.apple.com/*",
+        "https://www.sephora.com/*",
+        "https://www.sephora.co.uk/*",
+        "https://www.sephora.de/*",
+        "https://www.sephora.es/*",
+        "https://www.sephora.it/*"
+      ],
+      "js": [
+        "content.js"
+      ],
+      "css": [
+        "content.css"
+      ],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": [
+        "https://www.amazon.com/*",
+        "https://www.amazon.co.uk/*",
+        "https://www.amazon.fr/*",
+        "https://www.amazon.de/*",
+        "https://www.amazon.es/*",
+        "https://www.amazon.it/*",
+        "https://www.amazon.nl/*",
+        "https://www.amazon.ca/*",
+        "https://www.nike.com/*",
+        "https://www.adidas.com/*",
+        "https://www.adidas.co.uk/*",
+        "https://www.adidas.fr/*",
+        "https://www.adidas.de/*",
+        "https://www.adidas.es/*",
+        "https://www.adidas.it/*",
+        "https://www.adidas.nl/*",
+        "https://www.adidas.ca/*",
+        "https://www.zalando.co.uk/*",
+        "https://www.zalando.fr/*",
+        "https://www.zalando.de/*",
+        "https://www.zalando.es/*",
+        "https://www.zalando.it/*",
+        "https://www.zalando.nl/*",
+        "https://www.zalando.be/*",
+        "https://www.ikea.com/*",
+        "https://ordercapture.ikea.com/*",
+        "https://www.airbnb.com/*",
+        "https://www.airbnb.co.uk/*",
+        "https://www.airbnb.fr/*",
+        "https://www.airbnb.de/*",
+        "https://www.airbnb.es/*",
+        "https://www.airbnb.it/*",
+        "https://www.airbnb.nl/*",
+        "https://www.airbnb.ca/*",
+        "https://www.apple.com/*",
+        "https://*.store.apple.com/*",
+        "https://www.sephora.com/*",
+        "https://www.sephora.co.uk/*",
+        "https://www.sephora.de/*",
+        "https://www.sephora.es/*",
+        "https://www.sephora.it/*"
+      ],
+      "js": [
+        "inpage.js"
+      ],
+      "world": "MAIN",
+      "run_at": "document_start"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "assets/*"
+      ],
+      "matches": [
+        "https://www.amazon.com/*",
+        "https://www.amazon.co.uk/*",
+        "https://www.amazon.fr/*",
+        "https://www.amazon.de/*",
+        "https://www.amazon.es/*",
+        "https://www.amazon.it/*",
+        "https://www.amazon.nl/*",
+        "https://www.amazon.ca/*",
+        "https://www.nike.com/*",
+        "https://www.adidas.com/*",
+        "https://www.adidas.co.uk/*",
+        "https://www.adidas.fr/*",
+        "https://www.adidas.de/*",
+        "https://www.adidas.es/*",
+        "https://www.adidas.it/*",
+        "https://www.adidas.nl/*",
+        "https://www.adidas.ca/*",
+        "https://www.zalando.co.uk/*",
+        "https://www.zalando.fr/*",
+        "https://www.zalando.de/*",
+        "https://www.zalando.es/*",
+        "https://www.zalando.it/*",
+        "https://www.zalando.nl/*",
+        "https://www.zalando.be/*",
+        "https://www.ikea.com/*",
+        "https://ordercapture.ikea.com/*",
+        "https://www.airbnb.com/*",
+        "https://www.airbnb.co.uk/*",
+        "https://www.airbnb.fr/*",
+        "https://www.airbnb.de/*",
+        "https://www.airbnb.es/*",
+        "https://www.airbnb.it/*",
+        "https://www.airbnb.nl/*",
+        "https://www.airbnb.ca/*",
+        "https://www.apple.com/*",
+        "https://*.store.apple.com/*",
+        "https://www.sephora.com/*",
+        "https://www.sephora.co.uk/*",
+        "https://www.sephora.de/*",
+        "https://www.sephora.es/*",
+        "https://www.sephora.it/*"
+      ]
+    }
+  ]
+}

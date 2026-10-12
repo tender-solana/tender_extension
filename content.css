@@ -1,0 +1,657 @@
+/* Tender panel — the site's night (black, bone, signal orange), whatever the store looks like.
+   Everything is scoped to #spendly-panel / #spendly-launcher so the store's own styles stay untouched. */
+@font-face {
+  font-family: 'Tender Sans';
+  src: url('chrome-extension://__MSG_@@extension_id__/assets/archivo.woff2') format('woff2');
+  font-weight: 100 900;
+  font-stretch: 62% 125%;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Tender Mono';
+  src: url('chrome-extension://__MSG_@@extension_id__/assets/geist-mono.woff2') format('woff2');
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+#spendly-panel,
+#spendly-launcher {
+  --sp-bg: #0b0b0c;
+  --sp-raised: #121214;
+  --sp-sunk: #19191c;
+  --sp-ink: #edede6;
+  --sp-soft: #a3a39b;
+  --sp-mist: #6b6b66;
+  --sp-line: #26262a;
+  --sp-signal: #ff5b1f;
+  --sp-signal-hot: #ff7a47;
+  --sp-signal-tint: rgba(255, 91, 31, 0.12);
+  --sp-ok: #5bd69a;
+  --sp-ok-tint: rgba(91, 214, 154, 0.12);
+  --sp-warn: #f2b33d;
+  --sp-warn-tint: rgba(242, 179, 61, 0.12);
+  --sp-err: #ff6b6b;
+  --sp-err-tint: rgba(255, 107, 107, 0.12);
+  --sp-display: 'Tender Sans', ui-sans-serif, system-ui, sans-serif;
+  --sp-mono: 'Tender Mono', ui-monospace, Consolas, monospace;
+  --sp-shadow: 0 0 0 1px #000, 0 30px 70px -24px rgba(0, 0, 0, 0.75);
+  font: 13.5px/1.45 'Tender Sans', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  color: var(--sp-ink);
+  letter-spacing: normal;
+  text-align: left;
+  text-transform: none;
+  -webkit-font-smoothing: antialiased;
+  color-scheme: dark;
+}
+#spendly-panel *,
+#spendly-launcher * {
+  box-sizing: border-box;
+  font-family: inherit;
+}
+#spendly-panel[hidden],
+#spendly-launcher[hidden],
+#spendly-panel [hidden] {
+  display: none !important;
+}
+
+/* ---------- card */
+#spendly-panel {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  z-index: 2147483647;
+  width: 348px;
+  max-height: calc(100vh - 36px);
+  overflow: hidden auto;
+  background: var(--sp-bg);
+  border-radius: 6px;
+  box-shadow: var(--sp-shadow);
+  animation: sp-rise 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+#spendly-panel .sp-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 10px 10px 16px;
+  border-bottom: 1px solid var(--sp-line);
+}
+#spendly-panel .sp-name {
+  font-family: var(--sp-display);
+  font-weight: 800;
+  font-stretch: 116%;
+  font-size: 18px;
+  line-height: 1;
+  letter-spacing: -0.05em;
+}
+#spendly-panel .sp-name b {
+  color: var(--sp-signal);
+  font-weight: inherit;
+}
+#spendly-panel .sp-store {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--sp-soft);
+  font-family: inherit;
+  font-size: 12.5px;
+}
+#spendly-panel .sp-min {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 28px;
+  height: 28px;
+  margin-left: auto;
+  padding: 0;
+  border: 0;
+  border-radius: 2px;
+  background: transparent;
+  color: var(--sp-soft);
+  cursor: pointer;
+}
+#spendly-panel .sp-min:hover {
+  background: var(--sp-sunk);
+  color: var(--sp-ink);
+}
+#spendly-panel .sp-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  padding: 16px;
+}
+
+/* ---------- type */
+#spendly-panel .sp-title {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.3;
+}
+#spendly-panel .sp-sub {
+  margin: 3px 0 0;
+  color: var(--sp-soft);
+  font-size: 12.5px;
+}
+#spendly-panel .sp-hint,
+#spendly-panel .sp-dim {
+  color: var(--sp-soft);
+  font-size: 12px;
+}
+#spendly-panel .sp-hint {
+  margin: 6px 0 0;
+}
+#spendly-panel .sp-msg {
+  margin-top: 10px;
+}
+#spendly-panel .sp-bad {
+  color: var(--sp-err);
+}
+
+/* ---------- start: the amount, set big */
+#spendly-panel .sp-amount {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  margin-top: 12px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--sp-line);
+  cursor: text;
+}
+#spendly-panel .sp-amount:focus-within {
+  border-color: var(--sp-signal);
+}
+#spendly-panel .sp-amount span {
+  color: var(--sp-mist);
+  font-family: var(--sp-display);
+  font-weight: 800;
+  font-stretch: 116%;
+  font-size: 34px;
+}
+#spendly-panel .sp-amount input {
+  flex: 1;
+  width: 0;
+  min-width: 0;
+  height: auto;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  box-shadow: none;
+  background: transparent;
+  color: var(--sp-ink);
+  font-family: var(--sp-display);
+  font-weight: 800;
+  font-stretch: 116%;
+  font-size: 46px;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+}
+#spendly-panel .sp-input {
+  width: 100%;
+  height: 42px;
+  margin: 10px 0 0;
+  padding: 0 12px;
+  border-radius: 2px;
+  border: 1px solid var(--sp-line);
+  background: var(--sp-raised);
+  color: var(--sp-ink);
+  font-family: inherit;
+  font-size: 14px;
+}
+#spendly-panel .sp-input:focus {
+  outline: 0;
+  border-color: var(--sp-signal);
+}
+
+/* ---------- buttons */
+#spendly-panel .sp-btn {
+  width: 100%;
+  min-height: 42px;
+  margin: 14px 0 0;
+  padding: 0 14px;
+  border: 0;
+  border-radius: 2px;
+  background: var(--sp-signal);
+  color: var(--sp-bg);
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.15s;
+}
+#spendly-panel .sp-btn:hover {
+  background: var(--sp-signal-hot);
+}
+#spendly-panel .sp-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+#spendly-panel .sp-ghost,
+#spendly-panel .sp-ghost:hover {
+  background: transparent;
+  color: var(--sp-ink);
+  box-shadow: inset 0 0 0 1px var(--sp-line);
+}
+#spendly-panel .sp-ghost:hover {
+  box-shadow: inset 0 0 0 1px var(--sp-ink);
+}
+#spendly-panel .sp-btn + .sp-btn {
+  margin-top: 8px;
+}
+#spendly-panel .sp-actions {
+  display: grid;
+  grid-template-columns: 1fr 1.6fr;
+  gap: 8px;
+}
+#spendly-panel .sp-actions .sp-btn {
+  margin-top: 14px;
+}
+#spendly-panel .sp-link {
+  justify-self: center;
+  margin: 10px 0 0;
+  padding: 2px 4px;
+  border: 0;
+  background: none;
+  color: var(--sp-soft);
+  font-size: 12.5px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+#spendly-panel .sp-link:hover {
+  color: var(--sp-signal);
+}
+#spendly-panel :focus-visible,
+#spendly-launcher :focus-visible {
+  outline: 1px solid var(--sp-signal);
+  outline-offset: 2px;
+}
+
+/* ---------- checking */
+#spendly-panel .sp-bar {
+  display: block;
+  height: 2px;
+  margin-top: 14px;
+  background: var(--sp-line);
+  overflow: hidden;
+}
+#spendly-panel .sp-bar i {
+  display: block;
+  width: 40%;
+  height: 100%;
+  background: var(--sp-signal);
+  animation: sp-slide 1s ease-in-out infinite;
+}
+
+/* ---------- confirm */
+#spendly-panel .sp-sim {
+  justify-self: start;
+  margin-bottom: 10px;
+  padding: 3px 8px;
+  border-radius: 2px;
+  background: var(--sp-warn-tint);
+  color: var(--sp-warn);
+  font-family: inherit;
+  font-size: 12.5px;
+}
+#spendly-panel .sp-big {
+  margin-bottom: 8px;
+  font-family: var(--sp-display);
+  font-weight: 800;
+  font-stretch: 116%;
+  font-size: 44px;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+#spendly-panel .sp-line {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 4px 0;
+}
+#spendly-panel .sp-line b {
+  font-weight: 500;
+}
+#spendly-panel .sp-line > :last-child {
+  text-align: right;
+}
+#spendly-panel .sp-line.sp-dim {
+  padding: 2px 0;
+}
+#spendly-panel .sp-cost {
+  margin-top: 6px;
+  padding-top: 10px;
+  border-top: 1px dashed var(--sp-line);
+  font-size: 14.5px;
+}
+#spendly-panel .sp-cost b {
+  color: var(--sp-signal);
+}
+#spendly-panel .sp-save b {
+  color: var(--sp-ok);
+}
+#spendly-panel .sp-note {
+  margin: 12px 0 0;
+  padding: 9px 11px;
+  border-left: 2px solid var(--sp-signal);
+  background: var(--sp-raised);
+  color: var(--sp-soft);
+  font-size: 12px;
+}
+
+/* ---------- paying: steps */
+#spendly-panel .sp-steps {
+  display: grid;
+  gap: 2px;
+  margin: 14px 0 0;
+  padding: 0;
+  list-style: none;
+  font-family: inherit;
+  font-size: 12.5px;
+}
+#spendly-panel .sp-steps li {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 30px;
+  margin: 0;
+  color: var(--sp-mist);
+  transition: color 0.25s;
+}
+#spendly-panel .sp-steps li::before {
+  content: '';
+  flex: none;
+  width: 14px;
+  height: 14px;
+  border: 1px solid var(--sp-line);
+  transition: background-color 0.25s, border-color 0.25s;
+}
+#spendly-panel .sp-steps li.now {
+  color: var(--sp-ink);
+}
+#spendly-panel .sp-steps li.now::before {
+  border-color: var(--sp-signal);
+  animation: sp-blink 0.9s steps(2, start) infinite;
+}
+#spendly-panel .sp-steps li.on {
+  color: var(--sp-ink);
+}
+#spendly-panel .sp-steps li.on::before {
+  background: var(--sp-signal) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 8.2l2.6 2.6 5.4-5.6' fill='none' stroke='%230b0b0c' stroke-width='2' stroke-linecap='square'/%3E%3C/svg%3E") center / 12px no-repeat;
+  border-color: var(--sp-signal);
+}
+#spendly-panel .sp-wallet {
+  display: grid;
+  gap: 2px;
+  margin-top: 12px;
+  padding: 11px 12px;
+  border: 1px solid var(--sp-signal);
+  border-radius: 2px;
+  background: var(--sp-signal-tint);
+  color: var(--sp-ink);
+  font-size: 12.5px;
+  animation: sp-rise 0.3s cubic-bezier(0.22, 1, 0.36, 1), sp-glow 2s ease-in-out infinite;
+}
+#spendly-panel .sp-wallet b {
+  color: var(--sp-signal);
+  font-size: 13.5px;
+  font-weight: 600;
+}
+#spendly-panel .sp-details {
+  margin-top: 12px;
+  color: var(--sp-soft);
+  font-size: 12px;
+}
+#spendly-panel .sp-details summary {
+  cursor: pointer;
+  width: max-content;
+}
+#spendly-panel .sp-log {
+  display: grid;
+  gap: 3px;
+  max-height: 140px;
+  margin-top: 8px;
+  overflow: auto;
+  font-family: inherit;
+  font-size: 12.5px;
+}
+#spendly-panel .sp-l::before {
+  content: '›';
+  margin-right: 6px;
+  color: var(--sp-mist);
+}
+#spendly-panel .sp-l.sp-warn::before {
+  color: var(--sp-warn);
+}
+#spendly-panel .sp-l.sp-error {
+  color: var(--sp-err);
+}
+
+/* ---------- result */
+#spendly-panel .sp-result {
+  display: grid;
+  grid-template-columns: 40px minmax(0, 1fr);
+  gap: 12px;
+  align-items: start;
+}
+#spendly-panel .sp-badge {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 2px;
+  animation: sp-pop 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+#spendly-panel .sp-ok .sp-badge {
+  background: var(--sp-signal);
+  color: var(--sp-bg);
+}
+#spendly-panel .sp-err .sp-badge {
+  background: var(--sp-err-tint);
+  color: var(--sp-err);
+}
+#spendly-panel .sp-result .sp-title {
+  font-family: var(--sp-display);
+  font-weight: 800;
+  font-stretch: 116%;
+  font-size: 28px;
+  line-height: 1;
+}
+#spendly-panel .sp-codes {
+  display: grid;
+  gap: 6px;
+  margin-top: 8px;
+}
+#spendly-panel .sp-code {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+#spendly-panel .sp-code code {
+  padding: 4px 8px;
+  border-radius: 2px;
+  background: var(--sp-raised);
+  border: 1px solid var(--sp-line);
+  color: var(--sp-ink);
+  font-family: inherit;
+  font-size: 12px;
+  user-select: all;
+}
+#spendly-panel .sp-copy {
+  margin-left: auto;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--sp-signal);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* ---------- launcher (the folded panel) */
+#spendly-launcher {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  z-index: 2147483647;
+  display: flex;
+  align-items: center;
+  border-radius: 4px;
+  background: var(--sp-bg);
+  box-shadow: var(--sp-shadow);
+  animation: sp-rise 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+#spendly-launcher button {
+  border: 0;
+  background: none;
+  color: var(--sp-ink);
+  cursor: pointer;
+}
+#spendly-launcher .sp-open {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 11px 8px 11px 14px;
+  font-weight: 500;
+  font-size: 13.5px;
+}
+#spendly-launcher .sp-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--sp-signal);
+}
+#spendly-launcher .sp-off {
+  width: 30px;
+  height: 30px;
+  margin-right: 5px;
+  border-radius: 2px;
+  color: var(--sp-soft);
+  font-size: 17px;
+  line-height: 1;
+}
+#spendly-launcher .sp-off:hover {
+  background: var(--sp-sunk);
+  color: var(--sp-ink);
+}
+
+/* ---------- Amazon redeem page notice */
+.spendly-toast {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 2147483647;
+  max-width: 340px;
+  padding: 12px 16px;
+  border-radius: 4px;
+  border-left: 3px solid #ff5b1f;
+  background: #0b0b0c;
+  color: #edede6;
+  font: 500 13px/1.4 'Tender Sans', system-ui, sans-serif;
+  box-shadow: 0 12px 30px -12px rgba(0, 0, 0, 0.6);
+}
+
+@keyframes sp-rise {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+@keyframes sp-slide {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(250%);
+  }
+}
+@keyframes sp-blink {
+  to {
+    background: var(--sp-signal);
+  }
+}
+@keyframes sp-pop {
+  from {
+    transform: scale(0.6);
+    opacity: 0;
+  }
+}
+@keyframes sp-glow {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 91, 31, 0);
+  }
+  50% {
+    box-shadow: 0 0 0 4px rgba(255, 91, 31, 0.18);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  #spendly-panel,
+  #spendly-panel *,
+  #spendly-launcher {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* ---------- pay with: the coin the user picked */
+#spendly-panel .sp-label {
+  margin: 14px 0 6px;
+  color: var(--sp-mist);
+  font-family: inherit;
+  font-size: 12.5px;
+}
+#spendly-panel .sp-coins {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin-bottom: 4px;
+  border: 1px solid var(--sp-line);
+}
+#spendly-panel .sp-coin {
+  display: grid;
+  gap: 1px;
+  justify-items: center;
+  padding: 8px 4px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: var(--sp-ink);
+  cursor: pointer;
+  transition: background-color 0.15s, color 0.15s;
+}
+#spendly-panel .sp-coin + .sp-coin {
+  box-shadow: inset 1px 0 0 var(--sp-line);
+}
+#spendly-panel .sp-coin b {
+  font-family: inherit;
+  font-size: 12.5px;
+  font-weight: 500;
+}
+#spendly-panel .sp-coin small {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--sp-soft);
+  font-size: 12.5px;
+}
+#spendly-panel .sp-coin:hover:not(:disabled) {
+  background: var(--sp-sunk);
+}
+#spendly-panel .sp-coin.on {
+  background: var(--sp-signal);
+  color: var(--sp-bg);
+}
+#spendly-panel .sp-coin.on small {
+  color: rgba(11, 11, 12, 0.7);
+}
+#spendly-panel .sp-coin:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+#spendly-panel .sp-code code,
+#spendly-panel .sp-input,
+#spendly-panel .sp-log {
+  font-family: var(--sp-mono);
+}
